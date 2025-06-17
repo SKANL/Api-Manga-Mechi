@@ -1,29 +1,45 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MangaMechiApi.Models.Entities;
 
+[Table("mangas", Schema = "dbo")]
 public class Manga
 {
+    [Key]
+    [Column("id")]
     public int Id { get; set; }
 
-    [Required]
+    [Column("title")]
+    [StringLength(255)]
+    public string? Title { get; set; }
+
+    [Column("authors")]
+    public string? Authors { get; set; }
+
+    [Column("volumes")]
+    public int? Volumes { get; set; }
+
+    [Column("chapters")]
+    public int? Chapters { get; set; }
+
+    [Column("status")]
+    [StringLength(50)]
+    public string? Status { get; set; }
+
+    [Column("published")]
     [StringLength(100)]
-    public string Title { get; set; } = string.Empty;
+    public string? Published { get; set; }
 
-    [Required]
-    [StringLength(100)]
-    public string Author { get; set; } = string.Empty;
+    [Column("genres")]
+    public string? Genres { get; set; }
 
-    [Required]
-    public string Genre { get; set; } = string.Empty;
+    [Column("synopsis")]
+    public string? Synopsis { get; set; }
 
-    public int Year { get; set; }
-
-    [Required]
-    public string Status { get; set; } = string.Empty;
-
+    [Column("image_url")]
     [StringLength(500)]
-    public string Description { get; set; } = string.Empty;
+    public string? ImageUrl { get; set; }
 
-    public List<Prestamo> Prestamos { get; set; } = new List<Prestamo>();
+    public virtual ICollection<Prestamo> Prestamos { get; set; } = new List<Prestamo>();
 }

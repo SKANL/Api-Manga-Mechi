@@ -1,6 +1,8 @@
+using MangaMechiApi.Data;
 using MangaMechiApi.Data.Repositories;
 using MangaMechiApi.Services.Interfaces;
 using MangaMechiApi.Services.Implementations;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,13 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// Configure Entity Framework
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register services and repositories
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
-builder.Services.AddScoped<IMangaRepository, InMemoryMangaRepository>();
-builder.Services.AddScoped<IPrestamoRepository, InMemoryPrestamoRepository>();
+builder.Services.AddScoped<IMangaRepository, SqlServerMangaRepository>();
+builder.Services.AddScoped<IPrestamoRepository, SqlServerPrestamoRepository>();
 builder.Services.AddScoped<IMangaService, MangaService>();
 builder.Services.AddScoped<IPrestamoService, PrestamoService>();
 
@@ -24,21 +29,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    // AÑADE Y CONFIGURA ESTAS LÍNEAS PARA SWAGGER UI:
     app.UseSwaggerUI(options =>
     {
-        // Apunta la UI al endpoint de la especificación OpenAPI generado por MapOpenApi
         options.SwaggerEndpoint("/openapi/v1.json", "Mi API V1");
-        // Define la ruta donde se servirá Swagger UI.
-        // Con "swagger", accederás desde /swagger
         options.RoutePrefix = "swagger";
     });
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
