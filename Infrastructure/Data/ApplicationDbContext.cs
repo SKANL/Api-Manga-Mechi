@@ -1,17 +1,29 @@
 using Microsoft.EntityFrameworkCore;
-using MangaMechiApi.Models.Entities;
+using MangaMechiApi.Core.Entities;
 
-namespace MangaMechiApi.Data;
+namespace MangaMechiApi.Infrastructure.Data;
 
 public class ApplicationDbContext : DbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
+    private readonly DatabaseSettings _settings;
+
+    public ApplicationDbContext(DatabaseSettings settings)
     {
+        _settings = settings;
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer(_settings.ConnectionString);
+        }
     }
 
     public DbSet<Manga> Mangas { get; set; }
-    public DbSet<Prestamo> Prestamos { get; set; }    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public DbSet<Prestamo> Prestamos { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 

@@ -1,6 +1,6 @@
-using MangaMechiApi.Models.DTOs;
+using MangaMechiApi.Application.DTOs;
 
-namespace MangaMechiApi.Services.Interfaces;
+namespace MangaMechiApi.Application.Services;
 
 public interface IMangaService
 {

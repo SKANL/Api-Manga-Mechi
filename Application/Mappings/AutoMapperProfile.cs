@@ -1,8 +1,8 @@
 using AutoMapper;
-using MangaMechiApi.Models.DTOs;
-using MangaMechiApi.Models.Entities;
+using MangaMechiApi.Core.Entities;
+using MangaMechiApi.Application.DTOs;
 
-namespace MangaMechiApi.Mapping;
+namespace MangaMechiApi.Application.Mappings;
 
 public class AutoMapperProfile : Profile
 {

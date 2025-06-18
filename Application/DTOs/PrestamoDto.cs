@@ -1,4 +1,4 @@
-namespace MangaMechiApi.Models.DTOs;
+namespace MangaMechiApi.Application.DTOs;
 
 public class PrestamoDto
 {

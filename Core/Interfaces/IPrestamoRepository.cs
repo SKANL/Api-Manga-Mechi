@@ -1,9 +1,10 @@
-using MangaMechiApi.Models.Entities;
+using MangaMechiApi.Core.Entities;
 
-namespace MangaMechiApi.Data.Repositories;
+namespace MangaMechiApi.Core.Interfaces;
 
 public interface IPrestamoRepository
-{    Task<IEnumerable<Prestamo>> GetAllAsync();
+{
+    Task<IEnumerable<Prestamo>> GetAllAsync();
     Task<Prestamo?> GetByIdAsync(int id);
     Task<IEnumerable<Prestamo>> GetByMangaIdAsync(int mangaId);
     Task<Prestamo> CreateAsync(Prestamo prestamo);

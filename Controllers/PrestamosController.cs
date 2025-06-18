@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using MangaMechiApi.Models.DTOs;
-using MangaMechiApi.Services.Interfaces;
+using MangaMechiApi.Application.DTOs;
+using MangaMechiApi.Application.Services;
 
 namespace MangaMechiApi.Controllers;
 

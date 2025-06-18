@@ -1,6 +1,6 @@
-using MangaMechiApi.Models.Entities;
+using MangaMechiApi.Core.Entities;
 
-namespace MangaMechiApi.Data.Repositories;
+namespace MangaMechiApi.Core.Interfaces;
 
 public interface IMangaRepository
 {

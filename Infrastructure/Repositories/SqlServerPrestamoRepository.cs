@@ -1,22 +1,21 @@
 using Microsoft.EntityFrameworkCore;
-using MangaMechiApi.Models.Entities;
+using MangaMechiApi.Core.Entities;
+using MangaMechiApi.Core.Interfaces;
+using MangaMechiApi.Infrastructure.Data;
 
-namespace MangaMechiApi.Data.Repositories;
+namespace MangaMechiApi.Infrastructure.Repositories;
 
-public class SqlServerPrestamoRepository : IPrestamoRepository
+public class SqlServerPrestamoRepository : BaseRepository, IPrestamoRepository
 {
-    private readonly ApplicationDbContext _context;
-
-    public SqlServerPrestamoRepository(ApplicationDbContext context)
+    public SqlServerPrestamoRepository(ApplicationDbContext context, DatabaseSettings settings)
+        : base(context, settings)
     {
-        _context = context;
     }
 
     public async Task<IEnumerable<Prestamo>> GetAllAsync()
     {
         return await _context.Prestamos
             .Include(p => p.Manga)
-            .AsNoTracking()
             .ToListAsync();
     }
 
@@ -24,7 +23,6 @@ public class SqlServerPrestamoRepository : IPrestamoRepository
     {
         return await _context.Prestamos
             .Include(p => p.Manga)
-            .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
@@ -32,7 +30,6 @@ public class SqlServerPrestamoRepository : IPrestamoRepository
     {
         return await _context.Prestamos
             .Include(p => p.Manga)
-            .AsNoTracking()
             .Where(p => p.MangaId == mangaId)
             .ToListAsync();
     }
@@ -40,14 +37,14 @@ public class SqlServerPrestamoRepository : IPrestamoRepository
     public async Task<Prestamo> CreateAsync(Prestamo prestamo)
     {
         _context.Prestamos.Add(prestamo);
-        await _context.SaveChangesAsync();
+        await SaveChangesAsync();
         return prestamo;
     }
 
     public async Task UpdateAsync(Prestamo prestamo)
     {
         _context.Entry(prestamo).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
+        await SaveChangesAsync();
     }
 
     public async Task DeleteAsync(int id)
@@ -56,7 +53,7 @@ public class SqlServerPrestamoRepository : IPrestamoRepository
         if (prestamo != null)
         {
             _context.Prestamos.Remove(prestamo);
-            await _context.SaveChangesAsync();
+            await SaveChangesAsync();
         }
     }
 

@@ -1,10 +1,9 @@
 using AutoMapper;
-using MangaMechiApi.Data.Repositories;
-using MangaMechiApi.Models.DTOs;
-using MangaMechiApi.Models.Entities;
-using MangaMechiApi.Services.Interfaces;
+using MangaMechiApi.Core.Entities;
+using MangaMechiApi.Core.Interfaces;
+using MangaMechiApi.Application.DTOs;
 
-namespace MangaMechiApi.Services.Implementations;
+namespace MangaMechiApi.Application.Services;
 
 public class MangaService : IMangaService
 {
@@ -49,7 +48,6 @@ public class MangaService : IMangaService
         {
             throw new KeyNotFoundException($"Manga with ID {id} not found");
         }
-
         _mapper.Map(mangaDto, existingManga);
         await _mangaRepository.UpdateAsync(existingManga);
     }
@@ -60,7 +58,6 @@ public class MangaService : IMangaService
         {
             throw new KeyNotFoundException($"Manga with ID {id} not found");
         }
-
         await _mangaRepository.DeleteAsync(id);
     }
 }

@@ -1,16 +1,15 @@
 using Microsoft.EntityFrameworkCore;
-using MangaMechiApi.Models.Entities;
-using MangaMechiApi.Data;
+using MangaMechiApi.Core.Entities;
+using MangaMechiApi.Core.Interfaces;
+using MangaMechiApi.Infrastructure.Data;
 
-namespace MangaMechiApi.Data.Repositories;
+namespace MangaMechiApi.Infrastructure.Repositories;
 
-public class SqlServerMangaRepository : IMangaRepository
+public class SqlServerMangaRepository : BaseRepository, IMangaRepository
 {
-    private readonly ApplicationDbContext _context;
-
-    public SqlServerMangaRepository(ApplicationDbContext context)
+    public SqlServerMangaRepository(ApplicationDbContext context, DatabaseSettings settings)
+        : base(context, settings)
     {
-        _context = context;
     }
 
     public async Task<IEnumerable<Manga>> GetAllAsync()
@@ -33,14 +32,14 @@ public class SqlServerMangaRepository : IMangaRepository
     public async Task<Manga> CreateAsync(Manga manga)
     {
         _context.Mangas.Add(manga);
-        await _context.SaveChangesAsync();
+        await SaveChangesAsync();
         return manga;
     }
 
     public async Task UpdateAsync(Manga manga)
     {
         _context.Entry(manga).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
+        await SaveChangesAsync();
     }
 
     public async Task DeleteAsync(int id)
@@ -49,7 +48,7 @@ public class SqlServerMangaRepository : IMangaRepository
         if (manga != null)
         {
             _context.Mangas.Remove(manga);
-            await _context.SaveChangesAsync();
+            await SaveChangesAsync();
         }
     }
 
