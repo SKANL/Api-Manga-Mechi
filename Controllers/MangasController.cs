@@ -60,8 +60,12 @@ public class MangasController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<MangaDto>> Create(MangaCreateDto mangaDto)
+    public async Task<ActionResult<MangaDto>> Create([FromBody] MangaCreateDto mangaDto)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
         try
         {
             var createdManga = await _mangaService.CreateAsync(mangaDto);
@@ -70,7 +74,11 @@ public class MangasController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error creating manga");
-            return StatusCode(500, "An error occurred while processing your request");
+            return StatusCode(500, new {
+                error = "An error occurred while processing your request",
+                exception = ex.Message,
+                details = ex.InnerException?.Message
+            });
         }
     }
 
