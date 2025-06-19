@@ -90,4 +90,24 @@ public class SqlServerPrestamoRepository : BaseRepository, IPrestamoRepository
     {
         return await _context.Prestamos.AnyAsync(p => p.Id == id);
     }
+
+    public async Task<(IEnumerable<Prestamo> Items, int TotalCount)> GetAllPagedByEstadoAsync(PrestamoPagedRequestDto request)
+    {
+        var query = _context.Prestamos
+            .Include(p => p.Manga)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(request.Estado))
+        {
+            query = query.Where(p => p.Estado == request.Estado);
+        }
+
+        var totalCount = await query.CountAsync();
+        var items = await query
+            .Skip((request.PageNumber - 1) * request.PageSize)
+            .Take(request.PageSize)
+            .ToListAsync();
+
+        return (items, totalCount);
+    }
 }

@@ -112,4 +112,23 @@ public class PrestamosController : ControllerBase
             return StatusCode(500, "An error occurred while processing your request");
         }
     }
+
+    [HttpGet("filter")]
+    public async Task<ActionResult<PagedResultDto<PrestamoDto>>> GetByEstado(
+        [FromQuery] string estado,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        try
+        {
+            var request = new PrestamoPagedRequestDto { Estado = estado, PageNumber = pageNumber, PageSize = pageSize };
+            var prestamos = await _prestamoService.GetAllPagedByEstadoAsync(request);
+            return Ok(prestamos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error filtering prestamos by estado");
+            return StatusCode(500, "An error occurred while processing your request");
+        }
+    }
 }

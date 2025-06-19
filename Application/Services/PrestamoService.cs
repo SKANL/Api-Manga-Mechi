@@ -83,4 +83,11 @@ public class PrestamoService : IPrestamoService
         }
         await _prestamoRepository.DeleteAsync(id);
     }
+
+    public async Task<PagedResultDto<PrestamoDto>> GetAllPagedByEstadoAsync(PrestamoPagedRequestDto request)
+    {
+        var (items, totalCount) = await _prestamoRepository.GetAllPagedByEstadoAsync(request);
+        var prestamoDtos = _mapper.Map<IEnumerable<PrestamoDto>>(items);
+        return new PagedResultDto<PrestamoDto>(prestamoDtos, totalCount, request.PageNumber, request.PageSize);
+    }
 }

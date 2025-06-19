@@ -21,4 +21,7 @@ public interface IPrestamoRepository
     Task UpdateAsync(Prestamo prestamo);
     Task DeleteAsync(int id);
     Task<bool> ExistsAsync(int id);
+
+    // Nuevo método para filtrar préstamos por estado
+    Task<(IEnumerable<Prestamo> Items, int TotalCount)> GetAllPagedByEstadoAsync(PrestamoPagedRequestDto request);
 }

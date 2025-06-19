@@ -19,4 +19,7 @@ public interface IPrestamoService
     Task<PrestamoDto> CreateAsync(PrestamoCreateDto prestamoDto);
     Task UpdateAsync(int id, PrestamoUpdateDto prestamoDto);
     Task DeleteAsync(int id);
+
+    // Nuevo método para filtrar préstamos por estado
+    Task<PagedResultDto<PrestamoDto>> GetAllPagedByEstadoAsync(PrestamoPagedRequestDto request);
 }
