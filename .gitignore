@@ -1,78 +1,46 @@
-# Archivos y carpetas específicos de .NET
+# Ignore build output
 bin/
 obj/
-*.dll
-*.pdb
-*.exe
 
-# Archivos específicos del proyecto
+# Ignore user-specific files
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
-.vs/
-*.vspscc
-*.vssscc
 
-# Archivos de configuración local
-appsettings.Development.json
-*.Development.json
-
-# Archivos temporales de Visual Studio
+# Ignore VS Code settings
 .vscode/
-*.tmp
-*.temp
-*.cache
+
+# Ignore local configuration
+appsettings.Development.json
+appsettings.Local.json
+Properties/launchSettings.json
+
+# Ignore logs
 *.log
 
-# Archivos específicos de este proyecto
-MangaMechiApi.staticwebassets.endpoints.json
-MangaMechiApi.deps.json
-MangaMechiApi.runtimeconfig.json
-
-# Archivos del sistema operativo
-.DS_Store
-Thumbs.db
-
-# Archivos de dependencias
-packages/
-*.nupkg
-
-# Archivos de IDE
-.idea/
-*.swp
-*.swo
-*.[Cc]ache
-*.bak
-
-# Archivos de compilación
-[Dd]ebug/
-[Rr]elease/
-x64/
-x86/
-[Bb]in/
-[Oo]bj/
-[Ll]og/
-
-# Archivos de prueba
+# Ignore test results
 TestResults/
-[Tt]est[Rr]esult*/
-[Bb]uild[Ll]og.*
 
-# Archivos específicos de NuGet
-*.nuget.props
-*.nuget.targets
-project.lock.json
-project.assets.json
-*.nuget.cache
+# Ignore Rider files
+.idea/
+*.sln.iml
 
-# Archivos de publicación
+# Ignore publish output
 publish/
-*.[Pp]ublish.xml
-*.azurePubxml
-*.pubxml
-*.publishproj
 
-# Otros archivos que no deben ser versionados
-*.pfx
-*.snk
+# Ignore generated files
+Generated_Code/
+
+# Ignore database and cache files
+*.dbmdl
+*.bak
+*.cache
+*.tmp
+*.temp
+
+# Ignore Jupyter Notebooks checkpoints
+*.ipynb_checkpoints
+
+# Ignore secrets
+secrets.json
