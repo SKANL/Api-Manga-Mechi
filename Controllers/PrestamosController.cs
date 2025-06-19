@@ -20,20 +20,12 @@ public class PrestamosController : ControllerBase
 
     [HttpGet]
     public async Task<ActionResult<PagedResultDto<PrestamoDto>>> GetAll(
-        [FromQuery] int? mangaId = null, // Parámetro opcional para filtrar por MangaId
         [FromQuery] int pageNumber = 1,  // Parámetro de paginación
         [FromQuery] int pageSize = 10)   // Parámetro de paginación
     {
         try
         {
             var pagination = new PaginationRequestDto { PageNumber = pageNumber, PageSize = pageSize };
-
-            if (mangaId.HasValue)
-            {
-                var prestamosByManga = await _prestamoService.GetByMangaIdAsync(mangaId.Value, pagination);
-                return Ok(prestamosByManga);
-            }
-
             var prestamos = await _prestamoService.GetAllPagedAsync(pagination);
             return Ok(prestamos);
         }
