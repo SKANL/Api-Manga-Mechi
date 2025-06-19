@@ -1,3 +1,4 @@
+// MangaMechiApi.Application.Services/PrestamoService.cs
 using AutoMapper;
 using MangaMechiApi.Core.Entities;
 using MangaMechiApi.Core.Interfaces;
@@ -8,7 +9,7 @@ namespace MangaMechiApi.Application.Services;
 public class PrestamoService : IPrestamoService
 {
     private readonly IPrestamoRepository _prestamoRepository;
-    private readonly IMangaRepository _mangaRepository;
+    private readonly IMangaRepository _mangaRepository; // Se mantiene para validación en CreateAsync
     private readonly IMapper _mapper;
 
     public PrestamoService(
@@ -27,16 +28,26 @@ public class PrestamoService : IPrestamoService
         return _mapper.Map<IEnumerable<PrestamoDto>>(prestamos);
     }
 
+    // Implementación del nuevo método paginado
+    public async Task<PagedResultDto<PrestamoDto>> GetAllPagedAsync(PaginationRequestDto pagination)
+    {
+        var (items, totalCount) = await _prestamoRepository.GetAllPagedAsync(pagination);
+        var prestamoDtos = _mapper.Map<IEnumerable<PrestamoDto>>(items);
+        return new PagedResultDto<PrestamoDto>(prestamoDtos, totalCount, pagination.PageNumber, pagination.PageSize);
+    }
+
     public async Task<PrestamoDto?> GetByIdAsync(int id)
     {
         var prestamo = await _prestamoRepository.GetByIdAsync(id);
         return prestamo != null ? _mapper.Map<PrestamoDto>(prestamo) : null;
     }
 
-    public async Task<IEnumerable<PrestamoDto>> GetByMangaIdAsync(int mangaId)
+    // Modificación de GetByMangaIdAsync para paginación
+    public async Task<PagedResultDto<PrestamoDto>> GetByMangaIdAsync(int mangaId, PaginationRequestDto pagination)
     {
-        var prestamos = await _prestamoRepository.GetByMangaIdAsync(mangaId);
-        return _mapper.Map<IEnumerable<PrestamoDto>>(prestamos);
+        var (items, totalCount) = await _prestamoRepository.GetByMangaIdAsync(mangaId, pagination);
+        var prestamoDtos = _mapper.Map<IEnumerable<PrestamoDto>>(items);
+        return new PagedResultDto<PrestamoDto>(prestamoDtos, totalCount, pagination.PageNumber, pagination.PageSize);
     }
 
     public async Task<PrestamoDto> CreateAsync(PrestamoCreateDto prestamoDto)

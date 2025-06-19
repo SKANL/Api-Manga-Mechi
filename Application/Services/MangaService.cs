@@ -1,3 +1,4 @@
+// MangaMechiApi.Application.Services/MangaService.cs
 using AutoMapper;
 using MangaMechiApi.Core.Entities;
 using MangaMechiApi.Core.Interfaces;
@@ -22,16 +23,26 @@ public class MangaService : IMangaService
         return _mapper.Map<IEnumerable<MangaDto>>(mangas);
     }
 
+    // Implementación del nuevo método paginado
+    public async Task<PagedResultDto<MangaDto>> GetAllPagedAsync(PaginationRequestDto pagination)
+    {
+        var (items, totalCount) = await _mangaRepository.GetAllPagedAsync(pagination);
+        var mangaDtos = _mapper.Map<IEnumerable<MangaDto>>(items);
+        return new PagedResultDto<MangaDto>(mangaDtos, totalCount, pagination.PageNumber, pagination.PageSize);
+    }
+
     public async Task<MangaDto?> GetByIdAsync(int id)
     {
         var manga = await _mangaRepository.GetByIdAsync(id);
         return manga != null ? _mapper.Map<MangaDto>(manga) : null;
     }
 
-    public async Task<IEnumerable<MangaDto>> GetByGenreAsync(string genre)
+    // Modificación de GetByGenreAsync para paginación
+    public async Task<PagedResultDto<MangaDto>> GetByGenreAsync(string genre, PaginationRequestDto pagination)
     {
-        var mangas = await _mangaRepository.GetByGenreAsync(genre);
-        return _mapper.Map<IEnumerable<MangaDto>>(mangas);
+        var (items, totalCount) = await _mangaRepository.GetByGenreAsync(genre, pagination);
+        var mangaDtos = _mapper.Map<IEnumerable<MangaDto>>(items);
+        return new PagedResultDto<MangaDto>(mangaDtos, totalCount, pagination.PageNumber, pagination.PageSize);
     }
 
     public async Task<MangaDto> CreateAsync(MangaCreateDto mangaDto)

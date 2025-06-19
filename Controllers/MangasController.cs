@@ -1,7 +1,7 @@
+// MangaMechiApi.Controllers/MangasController.cs
 using Microsoft.AspNetCore.Mvc;
 using MangaMechiApi.Application.DTOs;
 using MangaMechiApi.Application.Services;
-using MangaMechiApi.Core.Interfaces;
 
 namespace MangaMechiApi.Controllers;
 
@@ -19,17 +19,22 @@ public class MangasController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MangaDto>>> GetAll([FromQuery] string? genero = null)
+    public async Task<ActionResult<PagedResultDto<MangaDto>>> GetAll(
+        [FromQuery] string? genero = null,
+        [FromQuery] int pageNumber = 1, // Parámetro de paginación
+        [FromQuery] int pageSize = 10) // Parámetro de paginación
     {
         try
         {
+            var pagination = new PaginationRequestDto { PageNumber = pageNumber, PageSize = pageSize };
+
             if (!string.IsNullOrWhiteSpace(genero))
             {
-                var mangasByGenre = await _mangaService.GetByGenreAsync(genero);
+                var mangasByGenre = await _mangaService.GetByGenreAsync(genero, pagination);
                 return Ok(mangasByGenre);
             }
 
-            var mangas = await _mangaService.GetAllAsync();
+            var mangas = await _mangaService.GetAllPagedAsync(pagination);
             return Ok(mangas);
         }
         catch (Exception ex)
