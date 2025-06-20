@@ -22,6 +22,7 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Manga> Mangas { get; set; }
     public DbSet<Prestamo> Prestamos { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

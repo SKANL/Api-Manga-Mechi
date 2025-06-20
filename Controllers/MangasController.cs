@@ -1,4 +1,5 @@
 // MangaMechiApi.Controllers/MangasController.cs
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MangaMechiApi.Application.DTOs;
 using MangaMechiApi.Application.Services;
@@ -7,6 +8,7 @@ namespace MangaMechiApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class MangasController : ControllerBase
 {
     private readonly IMangaService _mangaService;
